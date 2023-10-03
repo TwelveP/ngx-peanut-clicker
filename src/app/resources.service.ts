@@ -11,9 +11,9 @@ import { TaxService } from './tax.service';
 })
 export class ResourcesService {
   private _peanutStock = NaN;
-  private _peanutStockSource = new BehaviorSubject(this._peanutStock);
+  private readonly _peanutStockSource = new BehaviorSubject(this._peanutStock);
 
-  peanutStock$ = this._peanutStockSource.asObservable();
+  readonly peanutStock$ = this._peanutStockSource.asObservable();
 
   constructor(
     private readonly settingsService: SettingsService,
