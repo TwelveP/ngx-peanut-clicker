@@ -7,8 +7,7 @@ import { ResourcesService } from './resources.service';
 
 @Component({
   selector: 'app-main-screen',
-  templateUrl: './main-screen.component.html',
-  styleUrls: ['./main-screen.component.css']
+  templateUrl: './main-screen.component.html'
 })
 export class MainScreenComponent implements OnInit {
   peanutStock$?: Observable<number>;

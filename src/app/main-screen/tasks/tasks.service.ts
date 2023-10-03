@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, interval, merge } from 'rxjs';
-import { distinct, distinctUntilChanged, filter, ignoreElements, map, share, switchMap, takeLast, takeWhile, tap } from 'rxjs/operators';
+import { BehaviorSubject, interval } from 'rxjs';
+import { distinctUntilChanged, filter, ignoreElements, map, switchMap, takeLast, takeWhile, tap } from 'rxjs/operators';
 import { Task } from 'src/domain/tasks';
 
 const TASK_UPDATE_INTERVAL = 100;
@@ -27,7 +27,6 @@ export class TasksService {
       distinctUntilChanged(),
       tap(task => {
         if (task !== null) {
-          console.log('starting:', task);
           task.state = 'active';
         }
         this._activeTaskSource.next(task);
@@ -49,7 +48,6 @@ export class TasksService {
           const finishedTask = this._taskQueue.slice(0, 1)[0];
           finishedTask.state = 'finished';
           this._finishedTasks.push(finishedTask);
-          console.log('finished:', finishedTask);
           if (finishedTask.callback) {
             finishedTask.callback();
           }
@@ -69,7 +67,6 @@ export class TasksService {
       task.taskId = (this._finishedTasks.length + this._taskQueue.length + 1);
       task.state = 'queued';
     }
-    console.log('new:', task);
     this._taskQueue.push(task);
     this._taskQueueSource.next(this._taskQueue);
   }
