@@ -1,8 +1,13 @@
-<h1>NgxPeanutClicker</h1>
+<h1 class="text-center text-white">NgxPeanutClicker</h1>
 
-<p>You have sold {{ totalPeanutsSold$ | async }} peanuts.</p>
+<div class="m-8 max-w-sm bg-black text-yellow-400 rounded shadow-md">
+    <p>You have sold {{ totalPeanutsSold$ | async }} peanuts.</p>
+    <p>You have {{ totalMoney$ | async | currency }}</p>
+</div>
 
-<p>You have {{ totalMoney$ | async | currency }}</p>
-
-<button (click)="sellPeanut()">Sell A Peanut!</button>
-<button (click)="sellBagOfPeanuts()">Sell A Bag of Peanuts?</button>
+<div class="mt-8 flex place-content-center gap-4">
+    <button class="bg-yellow-500 text-black rounded-md border-4 border-black p-2"
+        (click)="sellPeanut()">Sell A Peanut!</button>
+    <button class="bg-yellow-500 text-black rounded-md border-4 border-black p-2"
+        (click)="sellBagOfPeanuts()">Sell A Bag of Peanuts?</button>
+</div>
