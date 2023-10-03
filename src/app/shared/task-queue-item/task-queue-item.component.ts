@@ -5,10 +5,10 @@ import { TaskQueueService } from 'src/app/task-queue.service';
 import { Task } from 'src/domain/tasks';
 
 @Component({
-  selector: 'app-progress-bar',
-  templateUrl: './progress-bar.component.html'
+  selector: 'app-task-queue-item',
+  templateUrl: './task-queue-item.component.html'
 })
-export class ProgressBarComponent {
+export class TaskQueueItemComponent {
   @Input() task?: Task;
 
   progress$: Observable<number>;

@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgressBarComponent } from './progress-bar.component';
+import { TaskQueueItemComponent } from './task-queue-item.component';
 
 describe('ProgressBarComponent', () => {
-  let component: ProgressBarComponent;
-  let fixture: ComponentFixture<ProgressBarComponent>;
+  let component: TaskQueueItemComponent;
+  let fixture: ComponentFixture<TaskQueueItemComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProgressBarComponent]
+      declarations: [TaskQueueItemComponent]
     });
-    fixture = TestBed.createComponent(ProgressBarComponent);
+    fixture = TestBed.createComponent(TaskQueueItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
