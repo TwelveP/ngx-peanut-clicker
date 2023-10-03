@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { TrustedResourceUrlPipe } from './pipes/trusted-resource-url/trusted-resource-url.pipe';
 import { TaskQueueItemComponent } from './task-queue-item/task-queue-item.component';
 import { StatusPanelComponent } from './status-panel/status-panel.component';
+import { MoneyEarntComponent } from './effects/money-earnt/money-earnt.component';
 
 @NgModule({
   declarations: [
     TrustedResourceUrlPipe,
     TaskQueueItemComponent,
-    StatusPanelComponent
+    StatusPanelComponent,
+    MoneyEarntComponent
   ],
   imports: [
     CommonModule
@@ -16,7 +18,8 @@ import { StatusPanelComponent } from './status-panel/status-panel.component';
   exports: [
     TrustedResourceUrlPipe,
     TaskQueueItemComponent,
-    StatusPanelComponent
+    StatusPanelComponent,
+    MoneyEarntComponent
   ]
 })
 export class SharedModule { }
