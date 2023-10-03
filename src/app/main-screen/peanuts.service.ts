@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, ReplaySubject, take, tap } from 'rxjs';
+import { ReplaySubject, take, tap } from 'rxjs';
 import { PeanutProduct } from 'src/domain/peanuts';
 import { SettingsService } from '../settings.service';
 
@@ -18,8 +18,7 @@ export class PeanutsService {
   constructor(
     private readonly settingsService: SettingsService
   ) {
-    this.waitForInitialData();
-    this.waitForInitialData();
+    this.waitForInitialResources();
   }
 
   sell(product: PeanutProduct) {
@@ -34,7 +33,7 @@ export class PeanutsService {
     return peanutType.initialProductionCost * (100 - taxPercentage);
   }
 
-  private waitForInitialData() {
+  private waitForInitialResources() {
     this.settingsService.settings$.pipe(
       take(1),
       tap(settings => {
