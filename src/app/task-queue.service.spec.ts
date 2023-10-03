@@ -16,6 +16,6 @@ describe('TaskQueueService', () => {
 
   it('should add tasks to the queue', () => {
     const input = {} as Task;
-    expect(service.enqueue(input)).not.toThrow();
+    expect(() => service.enqueue(input)).not.toThrow();
   });
 });

@@ -7,6 +7,7 @@ describe('SettingsService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(SettingsService);
+    service.resetAll();
   });
 
   it('should be created', () => {

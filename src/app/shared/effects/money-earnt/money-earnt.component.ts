@@ -6,14 +6,14 @@ import { PricedElement } from 'src/domain/base';
   templateUrl: './money-earnt.component.html'
 })
 export class MoneyEarntComponent {
-  @Input() product!: PricedElement;
+  @Input() product?: PricedElement;
   private readonly moneyLimits = [5000, 25000, 100000, 500000, 10000000];
 
   get money() {
-    return this.product.initialProductionCost;
+    return this.product?.initialProductionCost || 0;
   }
   get moneySprite() {
-    const currentMoney = this.product.initialProductionCost;
+    const currentMoney = this.money;
     const index = this.moneyLimits.findIndex(n => (n <= currentMoney));
     return `assets/money${index}.png`;
   }
