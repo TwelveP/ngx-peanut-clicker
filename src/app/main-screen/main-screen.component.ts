@@ -3,7 +3,7 @@ import { Observable, from } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
 import { BagOfPeanuts, SinglePeanut } from 'src/domain/peanuts';
 import { Task } from 'src/domain/tasks';
-import { ResourcesService } from './resources.service';
+import { ResourcesService } from '../resources.service';
 
 @Component({
   selector: 'app-main-screen',

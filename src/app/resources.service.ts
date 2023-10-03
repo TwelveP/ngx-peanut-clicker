@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject, take, tap } from 'rxjs';
 import { PeanutProduct } from 'src/domain/peanuts';
-import { SettingsService } from '../settings.service';
-import { TaskQueueService } from '../task-queue.service';
+import { SettingsService } from './settings.service';
+import { TaskQueueService } from './task-queue.service';
 
 @Injectable({
   providedIn: 'root'
