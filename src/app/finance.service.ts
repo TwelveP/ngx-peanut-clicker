@@ -36,14 +36,15 @@ export class FinanceService {
   }
 
   transact(amount: number) {
-    if (amount === 0) {
-      console.error('Zero-value financial operation');
-    } else if (Math.round(amount) !== amount) {
-      console.error('Transacting decimal amounts of money');
+    if (!amount) {
+      throw new Error('Transaction rejected - Invalid or zero-value operation');
+    }
+    if (Math.round(amount) !== amount) {
+      throw new Error('Transaction rejected - Decimal amounts of money');
     }
     const finalBalance = this._money + amount;
     if (finalBalance < this._bankruptLine) {
-      console.error('Balance is too low; cannot make any further spendings')
+      throw new Error('Transaction rejected - Balance is too low');
     }
     this._transactions.push({
       amount,

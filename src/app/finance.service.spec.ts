@@ -33,9 +33,12 @@ describe('FinanceService', () => {
 
   it('should update money balance', () => {
     /** from -50 to +50 */
-    const transactedAmount = (Math.random() * 100) - 50 || 1;
+    const pseudoRandomAmountOfMoney = (Math.floor(Math.random() * 100) - 50)
     /** from 1 to 10 */
-    const times = (Math.random() * 9) + 1;
+    const pseudoRandomAmountOfTimes = (Math.floor(Math.random() * 9)) + 1;
+
+    const transactedAmount = pseudoRandomAmountOfMoney || 1; // in case it's 0
+    const times = pseudoRandomAmountOfTimes;
     let initialMoney: number;
 
     concat(
@@ -45,13 +48,21 @@ describe('FinanceService', () => {
         ignoreElements()
       ),
       service.money$.pipe(
+        take(times + 1), // accounting for the initial value
         tap(balance => expect(balance).toBeDefined()),
-        tap(() => service.transact(transactedAmount)), // re-trigger observable emission
-        take(times)
+        tap(() => service.transact(transactedAmount)) // trigger another emission (looping here)
       )
     ).pipe(
       takeLast(1),
       tap(balance => expect(balance).toBe(initialMoney + (times * transactedAmount)))
     ).subscribe();
+  });
+
+  it('should not accept 0 for transact()', () => {
+    expect(() => service.transact(0)).toThrowError('Transaction rejected - Invalid or zero-value operation');
+  });
+
+  it('should not accept NaN for transact()', () => {
+    expect(() => service.transact(NaN)).toThrowError('Transaction rejected - Invalid or zero-value operation');
   });
 });
