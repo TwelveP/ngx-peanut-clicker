@@ -21,8 +21,8 @@ export class FinanceService {
   private readonly _moneySource = new ReplaySubject<number>(1);
   private _transactions: FinancialOperation[] = [];
   private _money = NaN;
-  private _bankruptLine = -1000;
 
+  readonly bankrupcyLine = -1000;
   readonly money$ = this._moneySource.asObservable();
 
   get transactions() {
@@ -43,7 +43,7 @@ export class FinanceService {
       throw new Error('Transaction rejected - Decimal amounts of money');
     }
     const finalBalance = this._money + amount;
-    if (finalBalance < this._bankruptLine) {
+    if (finalBalance < this.bankrupcyLine) {
       throw new Error('Transaction rejected - Balance is too low');
     }
     this._transactions.push({
