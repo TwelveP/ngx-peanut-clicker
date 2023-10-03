@@ -12,10 +12,7 @@ export class AppComponent implements OnDestroy {
   constructor(
     private readonly taskQueueService: TaskQueueService
   ) {
-    this.taskSystemSub = merge(
-      this.taskQueueService._doTaskActivationLifecycle(),
-      this.taskQueueService._doTaskProgressLifecycle()
-    ).subscribe();
+    this.taskSystemSub = this.taskQueueService.lifecycle$.subscribe();
   }
 
   ngOnDestroy(): void {
