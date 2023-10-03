@@ -6,7 +6,7 @@ import { ClockStates, CLOCK_PAUSE_TOGGLING_STATES } from 'src/domain/clock';
   providedIn: 'root'
 })
 export class ClockService {
-  private _state: ClockStates = 'stopped';
+  private _state: ClockStates = 'running';
   private readonly _stateSource = new BehaviorSubject(this._state);
 
   get currentState() {
