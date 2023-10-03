@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { PeanutsService } from './peanuts.service';
 import { BagOfPeanuts, SinglePeanut } from 'src/domain/peanuts';
-import { Observable, from, of } from 'rxjs';
-import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { distinctUntilChanged, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { Task } from 'src/domain/tasks';
 import { TasksService } from '../tasks.service';
 
@@ -29,11 +29,11 @@ export class PeanutsComponent implements OnInit {
     this.moneySpritePath$ = this.totalMoney$.pipe(
       switchMap(money => from(this.moneyLimits).pipe(
         filter(limit => (money < limit)),
-        take(1),
-        map(limit => this.moneyLimits.findIndex(n => (n === limit))),
-        map(index => `assets/money${index}.png`),
-        tap(console.log)
-      ))
+        take(1)
+      )),
+      distinctUntilChanged(),
+      map(limit => this.moneyLimits.findIndex(n => (n === limit))),
+      map(index => `assets/money${index}.png`)
     );
     this.tasks$ = this.tasksService.taskQueue$.pipe();
   }
