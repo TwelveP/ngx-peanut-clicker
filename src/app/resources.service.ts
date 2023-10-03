@@ -45,9 +45,6 @@ export class ResourcesService {
   private waitForInitialResources() {
     this.settingsService.settings$.pipe(
       take(1),
-      tap(settings => this.financeService.reset({
-        money: settings.initialMoney
-      })),
       tap(settings => {
         this._peanutStock = settings.initialPeanuts;
         this._peanutStockSource.next(this._peanutStock);

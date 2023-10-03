@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
+import { take, tap } from 'rxjs/operators';
+import { SettingsService } from './settings.service';
 
 interface FinancialOperation {
   finalBalance: number;
@@ -27,6 +29,12 @@ export class FinanceService {
     return this._transactions;
   }
 
+  constructor(
+    private readonly settingsService: SettingsService
+  ) {
+    this.waitForInitialResources();
+  }
+
   transact(amount: number) {
     if (amount === 0) {
       console.error('Zero-value financial operation');
@@ -45,7 +53,16 @@ export class FinanceService {
     this._moneySource.next(this._money);
   }
 
-  reset(params: FinancialResetParams) {
+  private waitForInitialResources() {
+    this.settingsService.settings$.pipe(
+      take(1),
+      tap(settings => this.reset({
+        money: settings.initialMoney
+      }))
+    ).subscribe();
+  }
+
+  private reset(params: FinancialResetParams) {
     this._transactions = params.transactions || [];
     this._money = params.money || 0;
     this._moneySource.next(this._money);
