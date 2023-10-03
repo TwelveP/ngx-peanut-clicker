@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject, take, tap } from 'rxjs';
 import { PeanutProduct } from 'src/domain/peanuts';
+import { FinanceService } from './finance.service';
 import { SettingsService } from './settings.service';
 import { TaskQueueService } from './task-queue.service';
-import { FinanceService } from './finance.service';
+import { TaxService } from './tax.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class ResourcesService {
   constructor(
     private readonly settingsService: SettingsService,
     private readonly tasksService: TaskQueueService,
-    private readonly financeService: FinanceService
+    private readonly financeService: FinanceService,
+    private readonly taxService: TaxService
   ) {
     this.waitForInitialResources();
   }
@@ -35,8 +37,7 @@ export class ResourcesService {
   }
 
   calculateProductPrice(peanutType: PeanutProduct): { price: number, tax: number } {
-    const taxPercentage = 0; // TODO
-    const tax = peanutType.initialProductionCost * taxPercentage;
+    const tax = this.taxService.calculateTax(peanutType);
     const price = (peanutType.initialProductionCost * 100) - tax;
     return { price, tax };
   }
