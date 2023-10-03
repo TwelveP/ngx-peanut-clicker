@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { PeanutsService } from './peanuts.service';
 import { BagOfPeanuts, SinglePeanut } from 'src/domain/peanuts';
-import { Observable, filter, first, from, last, map, switchMap, take, takeWhile, tap } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
+import { filter, map, switchMap, take, tap } from 'rxjs/operators';
+import { Task } from 'src/domain/tasks';
+import { TasksService } from '../tasks.service';
 
 @Component({
   selector: 'app-peanuts',
@@ -12,10 +15,12 @@ export class PeanutsComponent implements OnInit {
   peanutStock$?: Observable<number>;
   totalMoney$?: Observable<number>;
   moneySpritePath$?: Observable<string>;
+  tasks$?: Observable<Task[]>;
   moneyLimits = [5000, 25000, 100000, 500000, 10000000];
 
   constructor(
-    private service: PeanutsService
+    private service: PeanutsService,
+    private tasksService: TasksService
   ) { }
 
   ngOnInit(): void {
@@ -30,6 +35,7 @@ export class PeanutsComponent implements OnInit {
         tap(console.log)
       ))
     );
+    this.tasks$ = this.tasksService.taskQueue$.pipe();
   }
 
   sellPeanut(): void {

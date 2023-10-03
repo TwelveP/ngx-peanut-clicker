@@ -12,8 +12,12 @@
         </div>
     </div>
 
-    <div class="w-96 lg:w-[32rem] max-h-64 bg-yellow-100 rounded border-4 shadow-md p-4">
+    <div class="w-96 lg:w-[32rem] max-h-[32rem] bg-yellow-100 rounded border-4 shadow-md p-4">
         <textarea class="bg-transparent" rows="8" disabled></textarea>
+        <ng-container *ngFor="let t of tasks$ | async">
+            <app-progress-bar themeClass="yellow" [taskId]="t.taskId">
+            </app-progress-bar>
+        </ng-container>
     </div>
 </div>
 
