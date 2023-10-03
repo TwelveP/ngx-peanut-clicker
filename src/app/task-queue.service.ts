@@ -77,7 +77,7 @@ export class TaskQueueService {
     );
   }
 
-  _progressLifecycle(task: Task) {
+  private _progressLifecycle(task: Task) {
     const initialTimeSpent = this._currentTaskProgress;
     return interval(TASK_UPDATE_INTERVAL).pipe(
       map(i => (((i + 1) * TASK_UPDATE_INTERVAL) + initialTimeSpent)),
