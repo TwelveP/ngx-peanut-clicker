@@ -6,21 +6,21 @@ import { PeanutProduct } from 'src/domain/peanuts';
   providedIn: 'root'
 })
 export class PeanutsService {
-  _totalProducedPeanuts = 0;
+  _peanutStock = 0;
   _money = 0;
-  _totalProducedPeanutsSource = new BehaviorSubject(this._totalProducedPeanuts);
+  _peanutStockSource = new BehaviorSubject(this._peanutStock);
   _moneySource = new BehaviorSubject(this._money);
 
-  totalProducedPeanuts$ = this._totalProducedPeanutsSource.asObservable();
+  peanutStock$ = this._peanutStockSource.asObservable();
   money$ = this._moneySource.asObservable();
 
   constructor() { }
 
   sell(product: PeanutProduct) {
     this._money += this.calculateProductPrice(product);
-    this._totalProducedPeanuts += product.peanutsAmount;
+    this._peanutStock += product.peanutsAmount;
     this._moneySource.next(this._money);
-    this._totalProducedPeanutsSource.next(this._totalProducedPeanuts);
+    this._peanutStockSource.next(this._peanutStock);
   }
 
   calculateProductPrice(peanutType: PeanutProduct): number {

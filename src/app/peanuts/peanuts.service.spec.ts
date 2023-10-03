@@ -16,11 +16,11 @@ describe('PeanutsService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should update sold peanuts amount', () => {
+  it('should update peanut stock amount', () => {
     const attempts = 15;
     let soldPeanuts: number;
 
-    service.totalProducedPeanuts$.pipe(
+    service.peanutStock$.pipe(
       skip(1),
       take(attempts + 1),
       tap(amount => (soldPeanuts = amount)),

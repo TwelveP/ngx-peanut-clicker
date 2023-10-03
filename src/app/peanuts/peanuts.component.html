@@ -4,7 +4,7 @@
     <div class="w-96 max-h-96 bg-black text-yellow-400 rounded shadow-md p-4">
         <div class="flex items-baseline gap-4">
             <img src="assets/peanut2.png" alt="peanut" class="w-12">
-            <span class="text-4xl text-bold">{{ totalPeanutsSold$ | async }}</span>
+            <span class="text-4xl text-bold">{{ peanutStock$ | async }}</span>
         </div>
         <div class="flex items-baseline gap-4">
             <img [src]="moneySpritePath$ | async | trustedResourceUrl" alt="peanut" class="w-12">

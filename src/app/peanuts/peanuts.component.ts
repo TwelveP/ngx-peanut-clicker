@@ -9,7 +9,7 @@ import { Observable, filter, first, from, last, map, switchMap, take, takeWhile,
   styleUrls: ['./peanuts.component.css']
 })
 export class PeanutsComponent implements OnInit {
-  totalPeanutsSold$?: Observable<number>;
+  peanutStock$?: Observable<number>;
   totalMoney$?: Observable<number>;
   moneySpritePath$?: Observable<string>;
   moneyLimits = [5000, 25000, 100000, 500000, 10000000];
@@ -19,7 +19,7 @@ export class PeanutsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.totalPeanutsSold$ = this.service.totalProducedPeanuts$.pipe();
+    this.peanutStock$ = this.service.peanutStock$.pipe();
     this.totalMoney$ = this.service.money$.pipe();
     this.moneySpritePath$ = this.totalMoney$.pipe(
       switchMap(money => from(this.moneyLimits).pipe(
