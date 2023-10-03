@@ -1,4 +1,4 @@
-<div class="host grid grid-cols-1 gap-4 w-96 lg:w-[32rem] h-48 overflow-auto bg-yellow-100 rounded border-4 border-black shadow-md p-4">
+<div class="host w-full h-80 overflow-auto">
     <ng-container *ngFor="let t of (tasks$ | async)">
         <app-task-queue-item themeClass="yellow" [task]="t">
         </app-task-queue-item>

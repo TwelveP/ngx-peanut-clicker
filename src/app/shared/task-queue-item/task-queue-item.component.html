@@ -1,7 +1,8 @@
-<div class="container w-100 grid bg-black text-yellow-500 p-2">
-    <div class="grid grid-cols-2">
+<div class="m-2 bg-black text-yellow-500 p-2">
+    <div class="flex justify-between">
         <p>Task N°{{ task?.taskId }} | State: {{ task?.state }}</p>
         <p class="text-right font-bold">{{ progress$ | async }}%</p>
     </div>
-    <div class="progress bg-yellow-500 text-black text-center h-8" [style.width]="widthPercent$ | async"></div>
+    <div class="progress h-8 bg-yellow-500 text-black text-center"
+        [style.width]="widthPercent$ | async"></div>
 </div>
