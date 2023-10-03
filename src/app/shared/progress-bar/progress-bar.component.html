@@ -1,4 +1,7 @@
-<div class="w-100 container bg-yellow-500">
-    <p>Task N°{{ task?.taskId }} | State: {{ task?.state }}</p>
-    <div class="progress h-16">{{ progress$ | async }}%</div>
+<div class="container w-100 grid bg-black text-yellow-500 p-2">
+    <div class="grid grid-cols-2">
+        <p>Task N°{{ task?.taskId }} | State: {{ task?.state }}</p>
+        <p class="text-right font-bold">{{ progress$ | async }}%</p>
+    </div>
+    <div class="progress bg-yellow-500 text-black text-center h-8" style="width: {{ progress$ | async }}%;"></div>
 </div>
