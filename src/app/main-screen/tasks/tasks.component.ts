@@ -8,11 +8,11 @@ import { Task } from 'src/domain/tasks';
   templateUrl: './tasks.component.html'
 })
 export class TasksComponent {
-  tasks$?: Observable<Task[]>;
-  currentProgressPercent$?: Observable<number>;
+  readonly tasks$?: Observable<Task[]>;
+  readonly currentProgressPercent$?: Observable<number>;
 
   constructor(
-    private tasksService: TaskQueueService
+    private readonly tasksService: TaskQueueService
   ) {
     this.tasks$ = this.tasksService.taskQueue$.pipe();
     this.currentProgressPercent$ = this.tasksService.currentTaskProgressPercent$.pipe();

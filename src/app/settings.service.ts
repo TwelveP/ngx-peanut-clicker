@@ -16,7 +16,7 @@ export class SettingsService {
   private _settings?: Settings;
   private readonly _settingsSource = new ReplaySubject<Settings>(1);
 
-  settings$ = this._settingsSource.asObservable();
+  readonly settings$ = this._settingsSource.asObservable();
 
   constructor() {
     this.loadFromLocalStorage();

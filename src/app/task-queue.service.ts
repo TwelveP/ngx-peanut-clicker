@@ -13,15 +13,15 @@ export class TaskQueueService {
   private _finishedTasks: Task[] = [];
   private _taskQueue: Task[] = [];
   private _currentTaskProgress = 0;
-  private _taskQueueSource = new BehaviorSubject(this._taskQueue.slice());
-  private _activeTaskSource = new BehaviorSubject<Task | null>(null);
-  private _currentTaskProgressPercentSource = new BehaviorSubject(0);
-  private _finishedTasksSource = new BehaviorSubject(this._finishedTasks);
+  private readonly _taskQueueSource = new BehaviorSubject(this._taskQueue.slice());
+  private readonly _activeTaskSource = new BehaviorSubject<Task | null>(null);
+  private readonly _currentTaskProgressPercentSource = new BehaviorSubject(0);
+  private readonly _finishedTasksSource = new BehaviorSubject(this._finishedTasks);
 
-  taskQueue$ = this._taskQueueSource.asObservable();
-  activeTask$ = this._activeTaskSource.asObservable();
-  currentTaskProgressPercent$ = this._currentTaskProgressPercentSource.asObservable();
-  finishedTasks$ = this._finishedTasksSource.asObservable();
+  readonly taskQueue$ = this._taskQueueSource.asObservable();
+  readonly activeTask$ = this._activeTaskSource.asObservable();
+  readonly currentTaskProgressPercent$ = this._currentTaskProgressPercentSource.asObservable();
+  readonly finishedTasks$ = this._finishedTasksSource.asObservable();
 
   constructor(
     private readonly clockService: ClockService

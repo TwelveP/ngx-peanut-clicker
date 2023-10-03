@@ -14,7 +14,7 @@ function _getTutorialStorageName(name: TutorialNames) {
   providedIn: 'root'
 })
 export class TutorialService {
-  tutorials = {} as Tutorials;
+  readonly tutorials = {} as Tutorials;
 
   constructor() {
     this.loadFromLocalStorage();
