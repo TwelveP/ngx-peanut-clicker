@@ -7,7 +7,7 @@
             <span class="text-4xl text-bold">{{ totalPeanutsSold$ | async }}</span>
         </div>
         <div class="flex items-baseline gap-4">
-            <img src="assets/money0.png" alt="peanut" class="w-12">
+            <img [src]="moneySpritePath$ | async | trustedResourceUrl" alt="peanut" class="w-12">
             <span class="text-2xl">{{ totalMoney$ | async | currency }}</span>
         </div>
     </div>
