@@ -6,11 +6,11 @@ import { Task } from 'src/domain/tasks';
 import { PeanutsService } from './peanuts.service';
 
 @Component({
-  selector: 'app-peanuts',
-  templateUrl: './peanuts.component.html',
-  styleUrls: ['./peanuts.component.css']
+  selector: 'app-main-screen',
+  templateUrl: './main-screen.component.html',
+  styleUrls: ['./main-screen.component.css']
 })
-export class PeanutsComponent implements OnInit {
+export class MainScreenComponent implements OnInit {
   peanutStock$?: Observable<number>;
   totalMoney$?: Observable<number>;
   moneySpritePath$?: Observable<string>;

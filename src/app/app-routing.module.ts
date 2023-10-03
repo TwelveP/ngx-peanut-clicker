@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PeanutsComponent } from './peanuts/peanuts.component';
+import { MainScreenComponent } from './main-screen/main-screen.component';
 
 const routes: Routes = [
   {
-    path: 'peanuts', component: PeanutsComponent
+    path: 'peanuts', component: MainScreenComponent
   },
   {
     path: '**', pathMatch: 'full', redirectTo: '/peanuts'

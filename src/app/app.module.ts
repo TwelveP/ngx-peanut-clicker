@@ -1,16 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PeanutsComponent } from './peanuts/peanuts.component';
+import { MainScreenComponent } from './main-screen/main-screen.component';
+import { TasksComponent } from './main-screen/tasks/tasks.component';
 import { SharedModule } from './shared/shared.module';
-import { TasksComponent } from './peanuts/tasks/tasks.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PeanutsComponent,
+    MainScreenComponent,
     TasksComponent
   ],
   imports: [

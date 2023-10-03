@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { DEFAULT_SETTINGS, SettingsService } from './settings.service';
 
 describe('SettingsService', () => {

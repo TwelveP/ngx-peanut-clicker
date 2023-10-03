@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { finalize, skip, take, tap } from 'rxjs';
 import { SinglePeanut } from 'src/domain/peanuts';
 import { PeanutsService } from './peanuts.service';
