@@ -13,6 +13,11 @@ class StubStatusPanelComponent { }
 })
 class StubTasksComponent { }
 
+@Component({
+  selector: 'app-buttons-bar'
+})
+class StubButtonsBarComponent { }
+
 describe('MainScreenComponent', () => {
   let component: MainScreenComponent;
   let fixture: ComponentFixture<MainScreenComponent>;
@@ -22,7 +27,8 @@ describe('MainScreenComponent', () => {
       declarations: [
         MainScreenComponent,
         StubStatusPanelComponent,
-        StubTasksComponent
+        StubTasksComponent,
+        StubButtonsBarComponent
       ]
     });
     fixture = TestBed.createComponent(MainScreenComponent);

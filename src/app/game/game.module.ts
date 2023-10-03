@@ -6,13 +6,15 @@ import { StatusPanelComponent } from './main-screen/status-panel/status-panel.co
 import { TaskQueueComponent } from './main-screen/task-queue/task-queue.component';
 import { GameRoutingModule } from './game-routing.module';
 import { TaskQueueItemComponent } from './main-screen/task-queue/task-queue-item/task-queue-item.component';
+import { ButtonsBarComponent } from './main-screen/buttons-bar/buttons-bar.component';
 
 @NgModule({
   declarations: [
     MainScreenComponent,
     TaskQueueComponent,
     TaskQueueItemComponent,
-    StatusPanelComponent
+    StatusPanelComponent,
+    ButtonsBarComponent
   ],
   imports: [
     CommonModule,
