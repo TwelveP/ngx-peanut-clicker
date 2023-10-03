@@ -4,10 +4,10 @@ import { TaskQueueService } from '../../task-queue.service';
 import { Task } from 'src/domain/tasks';
 
 @Component({
-  selector: 'app-tasks',
-  templateUrl: './tasks.component.html'
+  selector: 'app-task-queue',
+  templateUrl: './task-queue.component.html'
 })
-export class TasksComponent {
+export class TaskQueueComponent {
   readonly tasks$?: Observable<Task[]>;
   readonly currentProgressPercent$?: Observable<number>;
 

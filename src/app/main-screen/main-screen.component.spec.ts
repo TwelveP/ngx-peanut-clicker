@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 class StubStatusPanelComponent { }
 
 @Component({
-  selector: 'app-tasks'
+  selector: 'app-task-queue'
 })
 class StubTasksComponent { }
 
