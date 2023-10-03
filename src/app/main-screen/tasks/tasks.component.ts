@@ -10,10 +10,12 @@ import { Task } from 'src/domain/tasks';
 })
 export class TasksComponent {
   tasks$?: Observable<Task[]>;
+  currentProgressPercent$?: Observable<number>;
 
   constructor(
     private tasksService: TasksService
   ) {
     this.tasks$ = this.tasksService.taskQueue$.pipe();
+    this.currentProgressPercent$ = this.tasksService.currentTaskProgressPercent$.pipe();
   }
 }

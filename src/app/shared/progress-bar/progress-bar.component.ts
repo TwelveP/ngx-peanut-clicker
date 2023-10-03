@@ -1,6 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { endWith, filter, map, share, startWith, switchMap, takeWhile, tap } from 'rxjs/operators';
+import { TasksService } from 'src/app/main-screen/tasks/tasks.service';
 import { RxjsUtil } from 'src/app/testing/rxjs-util';
+import { Task } from 'src/domain/tasks';
 
 type ThemeClasses = 'yellow' | 'blue';
 
@@ -9,19 +12,22 @@ type ThemeClasses = 'yellow' | 'blue';
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.css']
 })
-export class ProgressBarComponent {
-  @Input() taskId?: number | string;
+export class ProgressBarComponent implements OnInit {
+  @Input() task?: Task;
 
-  themeClass: ThemeClasses | '' = '';
-  /** Progress towards the  value of the `max` field. */
-  value = 0;
-  /** To divide the `value` field with. Said division should return a percentage value in decimal notation. */
-  max = 5;
+  progress$?: Observable<number>;
 
-  calcPercentage() {
-    return Math.floor(this.value / this.max) * 100;
-  }
-  calcWidth() {
-    return `${this.calcPercentage()}%`;
+  constructor(
+    private readonly tasksService: TasksService
+  ) { }
+
+  ngOnInit(): void {
+    this.progress$ = this.tasksService.activeTask$.pipe(
+      filter(() => this.task?.state === 'active'),
+      switchMap(() => this.tasksService.currentTaskProgressPercent$.pipe(
+        takeWhile(percent => (percent < 100))
+      )),
+      startWith(0)
+    );
   }
 }
