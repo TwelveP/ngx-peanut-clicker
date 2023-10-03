@@ -5,7 +5,11 @@ module.exports = {
     './src/app/**/*.{html,ts}'
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'fantasque-sans-mono': 'Fantasque Sans Mono'
+      }
+    },
   },
   plugins: [],
 }
