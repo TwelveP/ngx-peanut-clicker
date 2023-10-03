@@ -1,0 +1,5 @@
+<textarea class="bg-transparent" rows="8" disabled></textarea>
+<ng-container *ngFor="let t of tasks$ | async">
+    <app-progress-bar themeClass="yellow" [taskId]="t.taskId">
+    </app-progress-bar>
+</ng-container>

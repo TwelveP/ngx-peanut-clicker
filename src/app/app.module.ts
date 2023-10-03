@@ -5,11 +5,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { PeanutsComponent } from './peanuts/peanuts.component';
 import { SharedModule } from './shared/shared.module';
+import { TasksComponent } from './peanuts/tasks/tasks.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    PeanutsComponent
+    PeanutsComponent,
+    TasksComponent
   ],
   imports: [
     BrowserModule,
