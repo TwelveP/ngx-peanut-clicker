@@ -3,5 +3,5 @@
         <p>Task N°{{ task?.taskId }} | State: {{ task?.state }}</p>
         <p class="text-right font-bold">{{ progress$ | async }}%</p>
     </div>
-    <div class="progress bg-yellow-500 text-black text-center h-8" style="width: {{ progress$ | async }}%;"></div>
+    <div class="progress bg-yellow-500 text-black text-center h-8" [style.width]="widthPercent$ | async"></div>
 </div>
