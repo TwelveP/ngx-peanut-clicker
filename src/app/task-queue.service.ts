@@ -3,7 +3,7 @@ import { BehaviorSubject, interval } from 'rxjs';
 import { distinctUntilChanged, filter, ignoreElements, map, switchMap, takeLast, takeWhile, tap } from 'rxjs/operators';
 import { Task } from 'src/domain/tasks';
 
-const TASK_UPDATE_INTERVAL = 100;
+const TASK_UPDATE_INTERVAL = 20;
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +21,28 @@ export class TaskQueueService {
   currentTaskProgressPercent$ = this._currentTaskProgressPercentSource.asObservable();
   finishedTasks$ = this._finishedTasksSource.asObservable();
 
-  constructor() {
-    this.taskQueue$.pipe(
+  constructor() { }
+
+  enqueue(task: Task): void {
+    if (!task.taskId) {
+      task.taskId = (this._finishedTasks.length + this._taskQueue.length + 1);
+      task.state = 'queued';
+      task.timeCreated = Number(new Date());
+    }
+    this._taskQueue.push(task);
+    this._taskQueueSource.next(this._taskQueue);
+  }
+
+  pause(): void {
+    throw { error: 'not implemented' };
+  }
+
+  resume(): void {
+    throw { error: 'not implemented' };
+  }
+
+  _doTaskActivationLifecycle() {
+    return this.taskQueue$.pipe(
       map(queue => (queue[0] || null)),
       distinctUntilChanged(),
       tap(task => {
@@ -32,8 +52,11 @@ export class TaskQueueService {
         this._activeTaskSource.next(task);
       }),
       ignoreElements()
-    ).subscribe();
-    this.activeTask$.pipe(
+    );
+  }
+
+  _doTaskProgressLifecycle() {
+    return this.activeTask$.pipe(
       filter((task): task is Task => task !== null),
       switchMap(task => interval(TASK_UPDATE_INTERVAL).pipe(
         map(i => ((i + 1) * TASK_UPDATE_INTERVAL)),
@@ -59,24 +82,6 @@ export class TaskQueueService {
         })
       )),
       ignoreElements()
-    ).subscribe();
-  }
-
-  enqueue(task: Task): void {
-    if (!task.taskId) {
-      task.taskId = (this._finishedTasks.length + this._taskQueue.length + 1);
-      task.state = 'queued';
-      task.timeCreated = Number(new Date());
-    }
-    this._taskQueue.push(task);
-    this._taskQueueSource.next(this._taskQueue);
-  }
-
-  pause(): void {
-    throw { error: 'not implemented' };
-  }
-
-  resume(): void {
-    throw { error: 'not implemented' };
+    );
   }
 }
