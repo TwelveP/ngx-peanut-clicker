@@ -71,7 +71,7 @@ export class TaskQueueService {
       switchMap(task => this._progressLifecycle(task).pipe(
         takeUntil(this.clockService.state$.pipe(
           filter(state => (state === 'paused'))
-        )),
+        ))
       )),
       ignoreElements()
     );
@@ -81,7 +81,7 @@ export class TaskQueueService {
     const initialTimeSpent = this._currentTaskProgress;
     return interval(TASK_UPDATE_INTERVAL).pipe(
       map(i => (((i + 1) * TASK_UPDATE_INTERVAL) + initialTimeSpent)),
-      tap(timeSpent => this._currentTaskProgress = timeSpent),
+      tap(timeSpent => (this._currentTaskProgress = timeSpent)),
       tap(timeSpent => {
         const percent = Math.floor((timeSpent / task.duration) * 100);
         this._currentTaskProgressPercentSource.next(percent);
@@ -96,8 +96,12 @@ export class TaskQueueService {
         if (finishedTask.callback) {
           finishedTask.callback();
         }
+      }),
+      tap(() => {
         const queue = this._taskQueue.slice(1, Math.max(this._taskQueue.length, 0));
         this._taskQueue = queue;
+      }),
+      tap(() => {
         this._currentTaskProgress = 0;
         this._currentTaskProgressPercentSource.next(0);
         this._finishedTasksSource.next(this._finishedTasks);
