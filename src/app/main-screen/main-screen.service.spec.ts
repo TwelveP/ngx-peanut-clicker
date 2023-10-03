@@ -21,6 +21,7 @@ describe('MainScreenService', () => {
   });
 
   it('should sell peanuts', () => {
-
+    service.sellPeanut();
+    expect(resourcesService.sell).toHaveBeenCalled();
   });
 });
