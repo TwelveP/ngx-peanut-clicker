@@ -1,6 +1,4 @@
-<div class="host w-full h-80 overflow-auto">
-    <ng-container *ngFor="let t of (tasks$ | async)">
-        <app-task-queue-item themeClass="yellow" [task]="t">
-        </app-task-queue-item>
-    </ng-container>
-</div>
+<ng-container *ngFor="let t of (tasks$ | async)">
+    <app-task-queue-item themeClass="yellow" [task]="t">
+    </app-task-queue-item>
+</ng-container>
