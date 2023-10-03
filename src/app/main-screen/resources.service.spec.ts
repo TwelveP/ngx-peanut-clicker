@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { finalize, skip, take, tap } from 'rxjs';
 import { SinglePeanut } from 'src/domain/peanuts';
-import { PeanutsService } from './peanuts.service';
+import { ResourcesService } from './resources.service';
 
-describe('PeanutsService', () => {
-  let service: PeanutsService;
+describe('ResourcesService', () => {
+  let service: ResourcesService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PeanutsService);
+    service = TestBed.inject(ResourcesService);
   });
 
   it('should be created', () => {

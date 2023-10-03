@@ -3,7 +3,7 @@ import { Observable, from } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
 import { BagOfPeanuts, SinglePeanut } from 'src/domain/peanuts';
 import { Task } from 'src/domain/tasks';
-import { PeanutsService } from './peanuts.service';
+import { ResourcesService } from './resources.service';
 
 @Component({
   selector: 'app-main-screen',
@@ -18,12 +18,12 @@ export class MainScreenComponent implements OnInit {
   moneyLimits = [5000, 25000, 100000, 500000, 10000000];
 
   constructor(
-    private service: PeanutsService
+    private resourcesService: ResourcesService
   ) { }
 
   ngOnInit(): void {
-    this.peanutStock$ = this.service.peanutStock$.pipe();
-    this.totalMoney$ = this.service.money$.pipe();
+    this.peanutStock$ = this.resourcesService.peanutStock$.pipe();
+    this.totalMoney$ = this.resourcesService.money$.pipe();
     this.moneySpritePath$ = this.totalMoney$.pipe(
       switchMap(money => from(this.moneyLimits).pipe(
         filter(limit => (money < limit)),
@@ -37,11 +37,11 @@ export class MainScreenComponent implements OnInit {
 
   sellPeanut(): void {
     const single = new SinglePeanut();
-    this.service.sell(single);
+    this.resourcesService.sell(single);
   }
 
   sellBagOfPeanuts(): void {
     const bag = new BagOfPeanuts();
-    this.service.sell(bag);
+    this.resourcesService.sell(bag);
   }
 }

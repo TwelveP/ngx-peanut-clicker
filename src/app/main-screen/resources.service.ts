@@ -6,7 +6,7 @@ import { SettingsService } from '../settings.service';
 @Injectable({
   providedIn: 'root'
 })
-export class PeanutsService {
+export class ResourcesService {
   private _peanutStock = NaN;
   private _money = NaN;
   private _peanutStockSource = new ReplaySubject<number>(1);
@@ -29,7 +29,7 @@ export class PeanutsService {
   }
 
   calculateProductPrice(peanutType: PeanutProduct): number {
-    const taxPercentage = 0;
+    const taxPercentage = 0; // TODO
     return peanutType.initialProductionCost * (100 - taxPercentage);
   }
 
