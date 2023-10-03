@@ -31,10 +31,6 @@ export class SettingsService {
     this._settingsSource.next(this._settings!);
   }
 
-  getSettingsSnapshot(): Settings {
-    return JSON.parse(JSON.stringify(this._settings));
-  }
-
   resetAll(): void {
     this._settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
     this._settingsSource.next(this._settings!);
