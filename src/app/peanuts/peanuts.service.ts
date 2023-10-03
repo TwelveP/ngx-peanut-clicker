@@ -18,7 +18,7 @@ export class PeanutsService {
 
   sellPeanut(peanutType: PeanutProduct) {
     this._money += this.calculateProductPrice(peanutType);
-    this._totalProducedPeanuts += 1;
+    this._totalProducedPeanuts += peanutType.peanutsAmount;
     this._moneySource.next(this._money);
     this._totalProducedPeanutsSource.next(this._totalProducedPeanuts);
   }
