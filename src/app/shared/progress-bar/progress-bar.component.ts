@@ -11,6 +11,7 @@ type ThemeClasses = 'yellow' | 'blue';
 })
 export class ProgressBarComponent {
   @Input() taskId?: number | string;
+
   themeClass: ThemeClasses | '' = '';
   /** Progress towards the  value of the `max` field. */
   value = 0;
