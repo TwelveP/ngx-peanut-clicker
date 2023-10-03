@@ -31,7 +31,7 @@ export class ResourcesService {
       type: 'sell',
       duration: product.initialProductionCost * 100,
       product,
-      callback: () => this.financeService.transact(price)
+      callback: () => this.financeService.transact(price) // TODO delegate this to another service
     });
     this._peanutStockSource.next(this._peanutStock);
   }
