@@ -66,6 +66,7 @@ export class TasksService {
     if (!task.taskId) {
       task.taskId = (this._finishedTasks.length + this._taskQueue.length + 1);
       task.state = 'queued';
+      task.timeCreated = Number(new Date());
     }
     this._taskQueue.push(task);
     this._taskQueueSource.next(this._taskQueue);
