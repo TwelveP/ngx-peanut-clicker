@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    button.action {
+        @apply bg-yellow-500 text-black rounded-md border-4 border-black p-2 duration-150 hover:scale-105 hover:bg-yellow-600 active:bg-black active:text-yellow-500 active:border-yellow-500;
+    }
+}
