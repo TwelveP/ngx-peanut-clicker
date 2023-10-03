@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
 import { ClockService } from 'src/app/game/clock.service';
@@ -18,19 +18,21 @@ const CLOCK_STATE_ICONS: { [key in ClockStates]: string } = {
   selector: 'app-status-panel',
   templateUrl: './status-panel.component.html'
 })
-export class StatusPanelComponent {
-  readonly peanutStock$: Observable<number>;
-  readonly totalMoney$: Observable<number>;
-  readonly clockState$: Observable<string>;
-  readonly moneySpritePath$: Observable<string>;
-  readonly clockStateIcon$: Observable<string>;
+export class StatusPanelComponent implements OnInit {
+  peanutStock$?: Observable<number>;
+  totalMoney$?: Observable<number>;
+  clockState$?: Observable<string>;
+  moneySpritePath$?: Observable<string>;
+  clockStateIcon$?: Observable<string>;
   readonly moneyLimits = [5000, 25000, 100000, 500000, 10000000];
 
   constructor(
     private readonly resourcesService: ResourcesService,
     private readonly clockService: ClockService,
     private readonly financeService: FinanceService
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.peanutStock$ = this.resourcesService.peanutStock$.pipe();
     this.totalMoney$ = this.financeService.money$.pipe();
     this.clockState$ = this.clockService.state$.pipe();
