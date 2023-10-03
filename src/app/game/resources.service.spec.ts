@@ -33,7 +33,7 @@ describe('ResourcesService', () => {
       'TaxService',
       ['calculateTax']
     );
-    mockTaxService.calculateTax.and.returnValue(0);
+    mockTaxService.calculateTax.and.returnValue(of(0));
 
     TestBed.configureTestingModule({
       providers: [
@@ -62,7 +62,7 @@ describe('ResourcesService', () => {
       ),
       service.peanutStock$.pipe(
         tap(stock => expect(stock).toBeDefined()),
-        tap(() => service.sell(new SinglePeanut())),
+        tap(() => service.calculateSellOperationResourceUsage(new SinglePeanut())),
         take(times)
       )
     ).pipe(

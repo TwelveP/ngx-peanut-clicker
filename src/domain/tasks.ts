@@ -1,12 +1,16 @@
+import { Observable } from "rxjs";
 import { PeanutProduct } from "./peanuts";
 
 export type TaskStates = 'queued' | 'active' | 'paused' | 'finished' | 'cancelled';
+export type TaskTypes = 'buy' | 'sell';
 
 export interface Task {
-    type: 'buy' | 'sell' | '',
+    type: TaskTypes;
     duration: number;
+    cost?: number;
     description?: string;
-    callback?: () => any;
+    advanceCallback: Observable<void | never>;
+    doneCallback: Observable<void | never>;
     taskId?: number;
     state?: TaskStates;
     product?: PeanutProduct;

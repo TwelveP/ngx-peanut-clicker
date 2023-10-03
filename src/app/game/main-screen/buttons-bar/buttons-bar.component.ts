@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MainScreenService } from '../main-screen.service';
+import { ActionsService } from '../../actions.service';
 
 @Component({
   selector: 'app-buttons-bar',
@@ -9,14 +10,14 @@ import { MainScreenService } from '../main-screen.service';
 export class ButtonsBarComponent {
 
   constructor(
-    private readonly service: MainScreenService
+    private readonly service: ActionsService
   ) { }
 
   sellPeanut(): void {
-    this.service.sellPeanut();
+    this.service.sellPeanut().subscribe();
   }
 
   sellBagOfPeanuts(): void {
-    this.service.sellBagOfPeanuts();
+    this.service.sellBagOfPeanuts().subscribe();
   }
 }

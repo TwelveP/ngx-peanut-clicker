@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, take, tap } from 'rxjs';
+import { BehaviorSubject, Observable, of, take, tap } from 'rxjs';
 import { PeanutProduct } from 'src/domain/peanuts';
+import { ResourceUsageReport } from 'src/domain/resources';
 import { SettingsService } from '../settings.service';
-import { FinanceService } from './finance.service';
-import { TaskQueueService } from './task-queue.service';
-import { TaxService } from './tax.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,30 +14,23 @@ export class ResourcesService {
   readonly peanutStock$ = this._peanutStockSource.asObservable();
 
   constructor(
-    private readonly settingsService: SettingsService,
-    private readonly tasksService: TaskQueueService,
-    private readonly financeService: FinanceService,
-    private readonly taxService: TaxService
+    private readonly settingsService: SettingsService
   ) {
     this.waitForInitialResources();
   }
 
-  sell(product: PeanutProduct) {
-    const { price } = this.calculateProductPrice(product);
-    this._peanutStock -= product.peanutsAmount;
-    this.tasksService.enqueue({
-      type: 'sell',
-      duration: product.initialProductionCost * 100,
-      product,
-      callback: () => this.financeService.transact(price) // TODO delegate this to another service
-    });
-    this._peanutStockSource.next(this._peanutStock);
-  }
-
-  calculateProductPrice(peanutType: PeanutProduct): { price: number, tax: number } {
-    const tax = this.taxService.calculateTax(peanutType);
-    const price = (peanutType.initialProductionCost * 100) - tax;
-    return { price, tax };
+  calculateSellOperationResourceUsage(product: PeanutProduct): Observable<ResourceUsageReport> {
+    if (this._peanutStock < product.peanutsAmount) {
+      throw new Error('Not enough peanuts in stock');
+    }
+    return of({
+      duration: product.peanutsAmount * 100
+    }).pipe(
+      tap(() => {
+        this._peanutStock -= product.peanutsAmount;
+        this._peanutStockSource.next(this._peanutStock);
+      })
+    );
   }
 
   private waitForInitialResources() {

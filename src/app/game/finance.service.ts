@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { Observable, ReplaySubject } from 'rxjs';
+import { map, take, tap } from 'rxjs/operators';
+import { PricedElement } from 'src/domain/base';
+import { ProductMarketabilityReport } from 'src/domain/finance';
 import { SettingsService } from '../settings.service';
+import { TaxService } from './tax.service';
 
 interface FinancialOperation {
   finalBalance: number;
@@ -30,6 +33,7 @@ export class FinanceService {
   }
 
   constructor(
+    private readonly taxService: TaxService,
     private readonly settingsService: SettingsService
   ) {
     this.waitForInitialResources();
@@ -52,6 +56,17 @@ export class FinanceService {
     });
     this._money = finalBalance;
     this._moneySource.next(this._money);
+  }
+
+  calculateProductMarketability(product: PricedElement): Observable<ProductMarketabilityReport> {
+    const cost = product.initialProductionCost;
+    return this.taxService.calculateTax(product).pipe(
+      map(tax => ({
+        profits: (cost * 100) - tax,
+        expenses: cost,
+        tax
+      }))
+    );
   }
 
   private waitForInitialResources() {

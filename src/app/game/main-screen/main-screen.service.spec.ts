@@ -19,9 +19,4 @@ describe('MainScreenService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
-
-  it('should sell peanuts', () => {
-    service.sellPeanut();
-    expect(resourcesService.sell).toHaveBeenCalled();
-  });
 });

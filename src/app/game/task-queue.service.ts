@@ -1,10 +1,21 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, interval, merge } from 'rxjs';
-import { distinctUntilChanged, filter, ignoreElements, map, share, switchMap, takeUntil, takeWhile, tap } from 'rxjs/operators';
-import { Task } from 'src/domain/tasks';
+import { BehaviorSubject, EMPTY, Observable, ReplaySubject, interval, merge, of, throwError } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, ignoreElements, map, share, switchMap, takeLast, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { Task, TaskTypes } from 'src/domain/tasks';
 import { ClockService } from './clock.service';
+import { FinanceService } from './finance.service';
+import { ProductMarketabilityReport } from 'src/domain/finance';
+import { ResourceUsageReport } from 'src/domain/resources';
 
 const TASK_UPDATE_INTERVAL = 20;
+
+export interface TaskQueueRequest {
+  type: TaskTypes;
+  marketability: ProductMarketabilityReport;
+  resourceUsage: ResourceUsageReport;
+}
+
+type TaskCallbackMap = Readonly<{ [v in TaskTypes]: (request: TaskQueueRequest) => Observable<void> }>;
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +23,43 @@ const TASK_UPDATE_INTERVAL = 20;
 export class TaskQueueService {
   private _finishedTasks: Task[] = [];
   private _taskQueue: Task[] = [];
-  private _activeTask: Task | null = null;
   private _currentTaskProgress = 0;
   private readonly _taskQueueSource = new BehaviorSubject(this._taskQueue.slice());
-  private readonly _activeTaskSource = new BehaviorSubject<Task | null>(this._activeTask);
+  private readonly _activeTaskSource = new BehaviorSubject<Task | null>(null);
+  private readonly _latestFinishedTaskSource = new ReplaySubject<Task>(1);
   private readonly _currentTaskProgressPercentSource = new BehaviorSubject(0);
   private readonly _finishedTasksSource = new BehaviorSubject(this._finishedTasks);
 
   readonly taskQueue$ = this._taskQueueSource.asObservable();
   readonly activeTask$ = this._activeTaskSource.asObservable();
   readonly currentTaskProgressPercent$ = this._currentTaskProgressPercentSource.asObservable();
+  readonly latestFinishedTaskSource$ = this._latestFinishedTaskSource.asObservable();
   readonly finishedTasks$ = this._finishedTasksSource.asObservable();
   readonly lifecycle$: Observable<never>;
 
+  readonly TASK_ADVANCE_CALLBACKS_BY_TYPE: TaskCallbackMap = {
+    'buy': (request) => of(request.marketability.expenses / request.resourceUsage.duration).pipe(
+      map(expenses => Math.ceil(expenses)),
+      tap(expenses => this.financeService.transact(-expenses)),
+      map(() => void 0)
+    ),
+    'sell': (request) => of(request.marketability.profits / request.resourceUsage.duration).pipe(
+      map(earnings => Math.floor(earnings)),
+      tap(moneyEarnings => this.financeService.transact(moneyEarnings)),
+      map(() => void 0)
+    )
+  };
+  readonly TASK_DONE_CALLBACKS_BY_TYPE: TaskCallbackMap = {
+    'buy': () => EMPTY,
+    'sell': (request) => of(request.marketability.profits).pipe(
+      tap(profits => this.financeService.transact(profits)),
+      ignoreElements()
+    )
+  };
+
   constructor(
-    private readonly clockService: ClockService
+    private readonly clockService: ClockService,
+    private readonly financeService: FinanceService
   ) {
     this.lifecycle$ = merge(
       this.propagateActiveTaskInQueue(),
@@ -36,14 +69,25 @@ export class TaskQueueService {
     );
   }
 
-  enqueue(task: Task): void {
-    if (!task.taskId) {
-      task.taskId = (this._finishedTasks.length + this._taskQueue.length + 1);
-      task.state = 'queued';
-      task.timeCreated = Number(new Date());
-    }
-    this._taskQueue.push(task);
-    this._taskQueueSource.next(this._taskQueue);
+  enqueue(request: TaskQueueRequest): Observable<void> {
+    return new Observable(observer => {
+      const task: Task = {
+        taskId: (this._finishedTasks.length + this._taskQueue.length + 1),
+        state: 'queued',
+        timeCreated: Number(new Date()),
+        type: request.type,
+        duration: request.resourceUsage.duration,
+        advanceCallback: this.TASK_ADVANCE_CALLBACKS_BY_TYPE[request.type](request),
+        doneCallback: this.TASK_DONE_CALLBACKS_BY_TYPE[request.type](request)
+      };
+      this._taskQueue.push(task);
+      this._taskQueueSource.next(this._taskQueue);
+      observer.next();
+      observer.complete();
+      return {
+        unsubscribe() {}
+      };
+    });
   }
 
   /**
@@ -60,8 +104,7 @@ export class TaskQueueService {
         if (task !== null) {
           task.state = 'active';
         }
-        this._activeTask = task;
-        this._activeTaskSource.next(this._activeTask);
+        this._activeTaskSource.next(task);
       }),
       ignoreElements()
     );
@@ -95,9 +138,16 @@ export class TaskQueueService {
    * also update, see `whenTaskEnds`.
    * @returns An observable that will only execute this logic, without ever emitting a value.
    */
-  private advanceCurrentTask(task: Task) {
+  private advanceCurrentTask(task: Task): Observable<never> {
     const initialTimeSpent = this._currentTaskProgress;
     return interval(TASK_UPDATE_INTERVAL).pipe(
+      switchMap(i => task.advanceCallback.pipe(
+        map(() => i),
+        catchError(() => {
+          this.clockService.togglePause();
+          return EMPTY;
+        })
+      )),
       map(i => (((i + 1) * TASK_UPDATE_INTERVAL) + initialTimeSpent)),
       tap(timeSpent => (this._currentTaskProgress = timeSpent)),
       tap(timeSpent => {
@@ -118,13 +168,11 @@ export class TaskQueueService {
    * - Pops (removes first element) from queue array, which was the 'active' task just now.
    * - Resets/cleans up state after this. This includes propagation of the newly updated queue.
    */
-  private whenTaskEnds() {
+  private whenTaskEnds(): void {
     const finishedTask = this._taskQueue.slice(0, 1)[0];
     finishedTask.state = 'finished';
     this._finishedTasks.push(finishedTask);
-    if (finishedTask.callback) {
-      finishedTask.callback();
-    }
+    this._latestFinishedTaskSource.next(finishedTask);
 
     const queue = this._taskQueue.slice(1, Math.max(this._taskQueue.length, 0));
     this._taskQueue = queue;
