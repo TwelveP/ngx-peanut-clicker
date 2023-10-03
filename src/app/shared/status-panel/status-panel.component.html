@@ -1,0 +1,14 @@
+<div class="flex gap-4">
+    <div class="flex items-baseline gap-4">
+        <img src="assets/peanut2.png" alt="peanut" class="w-12">
+        <span class="text-4xl text-bold">{{ peanutStock$ | async }}</span>
+    </div>
+    <div class="flex items-baseline gap-4">
+        <img [src]="moneySpritePath$ | async | trustedResourceUrl" alt="peanut" class="w-12">
+        <span class="text-2xl">{{ totalMoney$ | async | currency }}</span>
+    </div>
+</div>
+<div class="flex items-center justify-between gap-4">
+    <p class="capitalize italic text-2xl">Time is {{ clockState$ | async }}</p>
+    <button class="text-4xl" (click)="toggleClockState()">{{ clockStateIcon$ | async }}</button>
+</div>
