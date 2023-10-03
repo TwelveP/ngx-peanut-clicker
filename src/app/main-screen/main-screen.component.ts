@@ -6,6 +6,7 @@ import { BagOfPeanuts, SinglePeanut } from 'src/domain/peanuts';
 import { Task } from 'src/domain/tasks';
 import { ClockService } from '../clock.service';
 import { ResourcesService } from '../resources.service';
+import { FinanceService } from '../finance.service';
 
 const CLOCK_STATE_ICONS: { [key in ClockStates]: string } = {
   stopped: '⏹',
@@ -32,10 +33,11 @@ export class MainScreenComponent implements OnInit {
 
   constructor(
     private readonly resourcesService: ResourcesService,
-    private readonly clockService: ClockService
+    private readonly clockService: ClockService,
+    private readonly financeService: FinanceService
   ) {
     this.peanutStock$ = this.resourcesService.peanutStock$.pipe();
-    this.totalMoney$ = this.resourcesService.money$.pipe();
+    this.totalMoney$ = this.financeService.money$.pipe();
     this.clockState$ = this.clockService.state$.pipe();
   }
 
