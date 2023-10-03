@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { TasksService } from './tasks.service';
+import { TaskQueueService } from '../../task-queue.service';
 import { Task } from 'src/domain/tasks';
 
 @Component({
@@ -12,7 +12,7 @@ export class TasksComponent {
   currentProgressPercent$?: Observable<number>;
 
   constructor(
-    private tasksService: TasksService
+    private tasksService: TaskQueueService
   ) {
     this.tasks$ = this.tasksService.taskQueue$.pipe();
     this.currentProgressPercent$ = this.tasksService.currentTaskProgressPercent$.pipe();

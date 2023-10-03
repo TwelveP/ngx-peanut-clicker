@@ -8,7 +8,7 @@ const TASK_UPDATE_INTERVAL = 100;
 @Injectable({
   providedIn: 'root'
 })
-export class TasksService {
+export class TaskQueueService {
   private _finishedTasks: Task[] = [];
   private _taskQueue: Task[] = [];
   private _taskQueueSource = new BehaviorSubject(this._taskQueue.slice());

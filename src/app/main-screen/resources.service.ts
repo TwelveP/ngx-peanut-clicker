@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { ReplaySubject, take, tap } from 'rxjs';
 import { PeanutProduct } from 'src/domain/peanuts';
 import { SettingsService } from '../settings.service';
-import { TasksService } from './tasks/tasks.service';
+import { TaskQueueService } from '../task-queue.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +18,7 @@ export class ResourcesService {
 
   constructor(
     private readonly settingsService: SettingsService,
-    private readonly tasksService: TasksService
+    private readonly tasksService: TaskQueueService
   ) {
     this.waitForInitialResources();
   }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, startWith, switchMap, takeWhile } from 'rxjs/operators';
-import { TasksService } from 'src/app/main-screen/tasks/tasks.service';
+import { TaskQueueService } from 'src/app/task-queue.service';
 import { Task } from 'src/domain/tasks';
 
 @Component({
@@ -14,13 +14,13 @@ export class ProgressBarComponent implements OnInit {
   progress$?: Observable<number>;
 
   constructor(
-    private readonly tasksService: TasksService
+    private readonly taskQueueService: TaskQueueService
   ) { }
 
   ngOnInit(): void {
-    this.progress$ = this.tasksService.activeTask$.pipe(
+    this.progress$ = this.taskQueueService.activeTask$.pipe(
       filter(() => this.task?.state === 'active'),
-      switchMap(() => this.tasksService.currentTaskProgressPercent$.pipe(
+      switchMap(() => this.taskQueueService.currentTaskProgressPercent$.pipe(
         takeWhile(percent => (percent < 100))
       )),
       startWith(0)
