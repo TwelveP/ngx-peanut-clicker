@@ -23,20 +23,22 @@ export class ResourcesService {
   }
 
   sell(product: PeanutProduct) {
-    const value = this.calculateProductPrice(product);
+    const { price } = this.calculateProductPrice(product);
     this._peanutStock -= product.peanutsAmount;
     this.tasksService.enqueue({
       type: 'sell',
       duration: product.initialProductionCost * 100,
       product,
-      callback: () => this.financeService.transact(value)
+      callback: () => this.financeService.transact(price)
     });
     this._peanutStockSource.next(this._peanutStock);
   }
 
-  calculateProductPrice(peanutType: PeanutProduct): number {
+  calculateProductPrice(peanutType: PeanutProduct): { price: number, tax: number } {
     const taxPercentage = 0; // TODO
-    return peanutType.initialProductionCost * (100 - taxPercentage);
+    const tax = peanutType.initialProductionCost * taxPercentage;
+    const price = (peanutType.initialProductionCost * 100) - tax;
+    return { price, tax };
   }
 
   private waitForInitialResources() {
