@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DEFAULT_SETTINGS, SettingsService } from './settings.service';
+import { take, tap } from 'rxjs/operators';
 
 describe('SettingsService', () => {
   let service: SettingsService;
@@ -15,18 +16,30 @@ describe('SettingsService', () => {
   });
 
   it('should use default settings', () => {
-    expect(service.getSettingsSnapshot()).toEqual(DEFAULT_SETTINGS);
+    service.settings$.pipe(
+      take(1),
+      tap(settings => expect(settings).toEqual(DEFAULT_SETTINGS))
+    ).subscribe();
   });
 
   it('should assign settings', () => {
-    const example = 5000;
-    service.set({ initialMoney: example });
-    expect(service.getSettingsSnapshot().initialMoney).toEqual(example);
+    const exampleSettings = {
+      initialMoney: 5000,
+      initialPeanuts: 100
+    };
+    service.set(exampleSettings);
+    service.settings$.pipe(
+      take(1),
+      tap(settings => expect(settings).toEqual(exampleSettings))
+    ).subscribe();
   });
 
   it('should reset settings', () => {
     service.set({ initialMoney: 5000 });
     service.resetAll();
-    expect(service.getSettingsSnapshot()).toEqual(DEFAULT_SETTINGS);
+    service.settings$.pipe(
+      take(1),
+      tap(settings => expect(settings).toEqual(DEFAULT_SETTINGS))
+    ).subscribe();
   });
 });
