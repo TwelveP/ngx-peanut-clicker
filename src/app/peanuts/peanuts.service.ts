@@ -6,10 +6,10 @@ import { PeanutProduct } from 'src/domain/peanuts';
   providedIn: 'root'
 })
 export class PeanutsService {
-  _peanutStock = 0;
-  _money = 0;
-  _peanutStockSource = new BehaviorSubject(this._peanutStock);
-  _moneySource = new BehaviorSubject(this._money);
+  private _peanutStock = 0;
+  private _money = 0;
+  private _peanutStockSource = new BehaviorSubject(this._peanutStock);
+  private _moneySource = new BehaviorSubject(this._money);
 
   peanutStock$ = this._peanutStockSource.asObservable();
   money$ = this._moneySource.asObservable();
