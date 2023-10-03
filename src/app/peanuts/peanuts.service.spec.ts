@@ -24,7 +24,7 @@ describe('PeanutsService', () => {
       skip(1),
       take(attempts + 1),
       tap(amount => (soldPeanuts = amount)),
-      tap(() => service.sellPeanut(new SinglePeanut())),
+      tap(() => service.sell(new SinglePeanut())),
       finalize(() => expect(soldPeanuts).toBe(attempts))
     ).subscribe();
   });

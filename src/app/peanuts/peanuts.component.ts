@@ -23,11 +23,11 @@ export class PeanutsComponent implements OnInit {
 
   sellPeanut(): void {
     const single = new SinglePeanut();
-    this.service.sellPeanut(single);
+    this.service.sell(single);
   }
 
   sellBagOfPeanuts(): void {
     const bag = new BagOfPeanuts();
-    this.service.sellPeanut(bag);
+    this.service.sell(bag);
   }
 }

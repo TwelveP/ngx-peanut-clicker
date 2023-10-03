@@ -16,9 +16,9 @@ export class PeanutsService {
 
   constructor() { }
 
-  sellPeanut(peanutType: PeanutProduct) {
-    this._money += this.calculateProductPrice(peanutType);
-    this._totalProducedPeanuts += peanutType.peanutsAmount;
+  sell(product: PeanutProduct) {
+    this._money += this.calculateProductPrice(product);
+    this._totalProducedPeanuts += product.peanutsAmount;
     this._moneySource.next(this._money);
     this._totalProducedPeanutsSource.next(this._totalProducedPeanuts);
   }
