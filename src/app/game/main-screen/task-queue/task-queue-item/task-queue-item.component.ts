@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { filter, map, startWith, switchMap, takeWhile } from 'rxjs/operators';
-import { TaskQueueService } from 'src/app/task-queue.service';
+import { TaskQueueService } from 'src/app/game/task-queue.service';
 import { Task } from 'src/domain/tasks';
 
 @Component({

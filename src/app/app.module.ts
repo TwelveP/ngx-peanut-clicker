@@ -1,23 +1,17 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MainScreenComponent } from './main-screen/main-screen.component';
-import { TaskQueueComponent } from './main-screen/task-queue/task-queue.component';
-import { SharedModule } from './shared/shared.module';
-import { StatusPanelComponent } from './main-screen/status-panel/status-panel.component';
+import { GameModule } from './game/game.module';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    MainScreenComponent,
-    TaskQueueComponent,
-    StatusPanelComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SharedModule
+    GameModule
   ],
   providers: [],
   bootstrap: [AppComponent]

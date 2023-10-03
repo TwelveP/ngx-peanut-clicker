@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { Observable, from } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
-import { ClockService } from 'src/app/clock.service';
-import { FinanceService } from 'src/app/finance.service';
-import { ResourcesService } from 'src/app/resources.service';
+import { ClockService } from 'src/app/game/clock.service';
+import { FinanceService } from 'src/app/game/finance.service';
+import { ResourcesService } from 'src/app/game/resources.service';
 import { ClockStates } from 'src/domain/clock';
 
 const CLOCK_STATE_ICONS: { [key in ClockStates]: string } = {

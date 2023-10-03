@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { concat, of } from 'rxjs';
 import { ignoreElements, map, take, takeLast, tap } from 'rxjs/operators';
 import { FinanceService } from './finance.service';
-import { DEFAULT_SETTINGS, SettingsService } from './settings.service';
+import { DEFAULT_SETTINGS, SettingsService } from '../settings.service';
 
 describe('FinanceService', () => {
   let service: FinanceService;

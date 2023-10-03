@@ -1,13 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TrustedResourceUrlPipe } from './pipes/trusted-resource-url/trusted-resource-url.pipe';
-import { TaskQueueItemComponent } from './task-queue-item/task-queue-item.component';
+import { NgModule } from '@angular/core';
 import { MoneyEarntComponent } from './effects/money-earnt/money-earnt.component';
+import { TrustedResourceUrlPipe } from './pipes/trusted-resource-url/trusted-resource-url.pipe';
 
 @NgModule({
   declarations: [
     TrustedResourceUrlPipe,
-    TaskQueueItemComponent,
     MoneyEarntComponent
   ],
   imports: [
@@ -15,7 +13,6 @@ import { MoneyEarntComponent } from './effects/money-earnt/money-earnt.component
   ],
   exports: [
     TrustedResourceUrlPipe,
-    TaskQueueItemComponent,
     MoneyEarntComponent
   ]
 })

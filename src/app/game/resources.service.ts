@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, take, tap } from 'rxjs';
 import { PeanutProduct } from 'src/domain/peanuts';
+import { SettingsService } from '../settings.service';
 import { FinanceService } from './finance.service';
-import { SettingsService } from './settings.service';
 import { TaskQueueService } from './task-queue.service';
 import { TaxService } from './tax.service';
 

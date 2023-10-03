@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Subscription, merge } from 'rxjs';
-import { TaskQueueService } from './task-queue.service';
+import { TaskQueueService } from './game/task-queue.service';
 
 @Component({
   selector: 'app-root',

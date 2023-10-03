@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
-import { SettingsService } from './settings.service';
+import { SettingsService } from '../settings.service';
 
 interface FinancialOperation {
   finalBalance: number;

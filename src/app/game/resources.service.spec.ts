@@ -3,7 +3,7 @@ import { concat, ignoreElements, of, take, takeLast, tap } from 'rxjs';
 import { SinglePeanut } from 'src/domain/peanuts';
 import { FinanceService } from './finance.service';
 import { ResourcesService } from './resources.service';
-import { SettingsService } from './settings.service';
+import { SettingsService } from '../settings.service';
 import { TaskQueueService } from './task-queue.service';
 import { TaxService } from './tax.service';
 
