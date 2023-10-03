@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PeanutsService } from './peanuts.service';
-import { SinglePeanut } from 'src/domain/peanuts';
+import { BagOfPeanuts, SinglePeanut } from 'src/domain/peanuts';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -24,5 +24,10 @@ export class PeanutsComponent implements OnInit {
   sellPeanut(): void {
     const single = new SinglePeanut();
     this.service.sellPeanut(single);
+  }
+
+  sellBagOfPeanuts(): void {
+    const bag = new BagOfPeanuts();
+    this.service.sellPeanut(bag);
   }
 }
