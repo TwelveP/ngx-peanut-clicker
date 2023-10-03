@@ -4,7 +4,7 @@
 module.exports = {
   content: [
     './src/index.html',
-    './src/app/**/*.{html,ts}'
+    './src/app/**/*.html'
   ],
   theme: {
     extend: {
