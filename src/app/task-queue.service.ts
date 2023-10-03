@@ -37,14 +37,6 @@ export class TaskQueueService {
     this._taskQueueSource.next(this._taskQueue);
   }
 
-  pause(): void {
-    throw { error: 'not implemented' };
-  }
-
-  resume(): void {
-    throw { error: 'not implemented' };
-  }
-
   _doTaskActivationLifecycle() {
     return this.taskQueue$.pipe(
       map(queue => (queue[0] || null)),

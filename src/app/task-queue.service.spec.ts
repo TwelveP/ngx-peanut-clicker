@@ -18,9 +18,4 @@ describe('TaskQueueService', () => {
     const input = {} as Task;
     expect(service.enqueue(input)).not.toThrow();
   });
-
-  it('should pause and resume the queue', () => {
-    expect(service.pause()).not.toThrow();
-    expect(service.resume()).not.toThrow();
-  });
 });
