@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { concat, of } from 'rxjs';
-import { ignoreElements, take, takeLast, tap } from 'rxjs/operators';
+import { ignoreElements, map, take, takeLast, tap } from 'rxjs/operators';
 import { FinanceService } from './finance.service';
 import { DEFAULT_SETTINGS, SettingsService } from './settings.service';
 
@@ -64,5 +64,19 @@ describe('FinanceService', () => {
 
   it('should not accept NaN for transact()', () => {
     expect(() => service.transact(NaN)).toThrowError('Transaction rejected - Invalid or zero-value operation');
+  });
+
+  it('should not accept decimals for transact()', () => {
+    const pseudoRandomAmountOfMoney = Math.floor(Math.random() * 100);
+    const decimalAmountOfMoney = pseudoRandomAmountOfMoney / 100;
+    expect(() => service.transact(decimalAmountOfMoney)).toThrowError('Transaction rejected - Decimal amounts of money');
+  });
+
+  it('should not allow expenses upon a state of bankrupcy', () => {
+    service.money$.pipe(
+      take(1),
+      map(balance => (-((balance * 2) + service.bankrupcyLine))),
+      tap(doubleCurrentBalance => expect(() => service.transact(doubleCurrentBalance)).toThrowError('Transaction rejected - Balance is too low'))
+    ).subscribe();
   });
 });
