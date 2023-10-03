@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="flex items-center justify-between gap-4">
-        <p class="capitalize text-2xl">Time is {{ clockState$ | async }}</p>
+        <p class="capitalize italic text-2xl">Time is {{ clockState$ | async }}</p>
         <button class="text-4xl" (click)="toggleClockState()">{{ clockStateIcon$ | async }}</button>
     </div>
 </div>
