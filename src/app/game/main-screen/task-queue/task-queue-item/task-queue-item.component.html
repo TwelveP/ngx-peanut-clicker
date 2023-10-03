@@ -3,6 +3,6 @@
         <p>Task N°{{ task?.taskId }} | State: {{ task?.state }}</p>
         <p class="text-right font-bold">{{ progress$ | async }}%</p>
     </div>
-    <div class="progress h-8 bg-yellow-500 text-black text-center"
+    <div class="progress h-8 bg-[url('assets/peanut-bg-16x16.png')] text-black text-center"
         [style.width]="widthPercent$ | async"></div>
 </div>
