@@ -3,7 +3,7 @@ import { Observable, from } from 'rxjs';
 import { distinctUntilChanged, filter, map, switchMap, take } from 'rxjs/operators';
 import { ClockService } from 'src/app/game/clock.service';
 import { FinanceService } from 'src/app/game/finance.service';
-import { ResourcesService } from 'src/app/game/resources.service';
+import { ResourceStockService } from 'src/app/game/resource-stock.service';
 import { ClockStates } from 'src/domain/clock';
 
 const CLOCK_STATE_ICONS: { [key in ClockStates]: string } = {
@@ -27,7 +27,7 @@ export class StatusPanelComponent implements OnInit {
   readonly moneyLimits = [5000, 25000, 100000, 500000, 10000000];
 
   constructor(
-    private readonly resourcesService: ResourcesService,
+    private readonly resourcesService: ResourceStockService,
     private readonly clockService: ClockService,
     private readonly financeService: FinanceService
   ) { }

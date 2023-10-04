@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 import { MainScreenService } from './main-screen.service';
-import { ResourcesService } from '../resources.service';
+import { ResourceStockService } from '../resource-stock.service';
 
 describe('MainScreenService', () => {
   let service: MainScreenService;
-  let resourcesService: jasmine.SpyObj<ResourcesService>;
+  let resourcesService: jasmine.SpyObj<ResourceStockService>;
 
   beforeEach(() => {
     resourcesService = jasmine.createSpyObj('ResourcesService', ['sell']);
     TestBed.configureTestingModule({
       providers: [
-        { provide: ResourcesService, useValue: resourcesService }
+        { provide: ResourceStockService, useValue: resourcesService }
       ]
     });
     service = TestBed.inject(MainScreenService);

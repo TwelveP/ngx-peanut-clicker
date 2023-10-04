@@ -2,13 +2,13 @@ import { TestBed } from '@angular/core/testing';
 import { concat, ignoreElements, of, take, takeLast, tap } from 'rxjs';
 import { SinglePeanut } from 'src/domain/peanuts';
 import { FinanceService } from './finance.service';
-import { ResourcesService } from './resources.service';
+import { ResourceStockService } from './resource-stock.service';
 import { SettingsService } from '../settings.service';
 import { TaskQueueService } from './task-queue.service';
 import { TaxService } from './tax.service';
 
-describe('ResourcesService', () => {
-  let service: ResourcesService;
+describe('ResourceStockService', () => {
+  let service: ResourceStockService;
   let mockSettingService: Partial<SettingsService>;
   let mockTaskQueueService: jasmine.SpyObj<TaskQueueService>;
   let mockFinanceService: jasmine.SpyObj<FinanceService>;
@@ -43,7 +43,7 @@ describe('ResourcesService', () => {
         { provide: TaxService,        useValue: mockTaxService }
       ]
     });
-    service = TestBed.inject(ResourcesService);
+    service = TestBed.inject(ResourceStockService);
   });
 
   it('should be created', () => {

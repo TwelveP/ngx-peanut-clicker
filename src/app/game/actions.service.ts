@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, combineLatest, switchMap } from 'rxjs';
 import { BagOfPeanuts, PeanutProduct, SinglePeanut } from 'src/domain/peanuts';
 import { FinanceService } from './finance.service';
-import { ResourcesService } from './resources.service';
+import { ResourceStockService } from './resource-stock.service';
 import { TaskQueueService } from './task-queue.service';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { TaskQueueService } from './task-queue.service';
 export class ActionsService {
 
   constructor(
-    private readonly resourcesService: ResourcesService,
+    private readonly resourcesService: ResourceStockService,
     private readonly financeService: FinanceService,
     private readonly tasksService: TaskQueueService
   ) { }

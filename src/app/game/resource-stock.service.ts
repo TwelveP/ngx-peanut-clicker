@@ -7,7 +7,7 @@ import { SettingsService } from '../settings.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ResourcesService {
+export class ResourceStockService {
   private _peanutStock = NaN;
   private readonly _peanutStockSource = new BehaviorSubject(this._peanutStock);
 
