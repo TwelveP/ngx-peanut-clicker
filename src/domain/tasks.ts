@@ -1,19 +1,28 @@
-import { Observable } from "rxjs";
 import { PeanutProduct } from "./peanuts";
+import { ProductMarketabilityReport } from "./finance";
+import { ResourceUsageReport } from "./resources";
 
 export type TaskStates = 'queued' | 'active' | 'paused' | 'finished' | 'cancelled';
 export type TaskTypes = 'buy' | 'sell';
 
-export interface Task {
+export interface TaskDraft {
     type: TaskTypes;
+    state: TaskStates;
+    timeCreated: number;
+    plan: TaskPlan;
+}
+
+export interface Task extends TaskDraft {
+    taskId: number;
     duration: number;
-    cost?: number;
-    description?: string;
-    advanceCallback: Observable<void | never>;
-    doneCallback: Observable<void | never>;
-    taskId?: number;
-    state?: TaskStates;
+    cost: number;
+    description: string;
     product?: PeanutProduct;
-    timeCreated?: number;
     timeFinished?: number;
+}
+
+export interface TaskPlan {
+    type: TaskTypes;
+    marketability: ProductMarketabilityReport;
+    resourceUsage: ResourceUsageReport;
 }
