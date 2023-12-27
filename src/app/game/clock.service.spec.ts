@@ -17,15 +17,16 @@ describe('ClockService', () => {
 
   it('should toggle states', () => {
     const tries = 3;
-    let currentState = service.currentState;
-    let previousState: ClockStates;
+    let currentState: ClockStates | undefined;
+    let previousState: ClockStates | undefined;
     service.state$.pipe(
-      skip(1), // current state is set
       take(tries),
       tap(state => {
         previousState = currentState;
         currentState = state;
-        expect(currentState).toEqual(CLOCK_PAUSE_TOGGLING_STATES[previousState]);
+        if (previousState) {
+          expect(currentState).toEqual(CLOCK_PAUSE_TOGGLING_STATES[previousState]);
+        }
       })
     ).subscribe();
     for (let i = 0; i < tries; i++) {

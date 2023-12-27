@@ -9,9 +9,6 @@ export class ClockService {
   private _state: ClockStates = 'running';
   private readonly _stateSource = new BehaviorSubject(this._state);
 
-  get currentState() {
-    return this._state;
-  }
   private set currentState(v: ClockStates) {
     this._state = v;
     this._stateSource.next(this._state);
