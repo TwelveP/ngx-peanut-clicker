@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { TaskQueueRequest, TaskQueueService } from './task-queue.service';
+import { TaskQueueService } from './task-queue.service';
+import { TaskPlan } from 'src/domain/tasks';
 
 describe('TaskQueueService', () => {
   let service: TaskQueueService;
@@ -14,7 +15,7 @@ describe('TaskQueueService', () => {
   });
 
   xit('should add tasks to the queue', () => {
-    const input = {} as TaskQueueRequest;
+    const input = {} as TaskPlan;
     expect(() => service.enqueue(input)).not.toThrow();
   });
 });
