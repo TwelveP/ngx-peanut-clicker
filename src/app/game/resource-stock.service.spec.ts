@@ -18,7 +18,7 @@ describe('ResourceStockService', () => {
     mockSettingService = {
       settings$: of({
         initialMoney: 0,
-        initialPeanuts: 0
+        initialPeanuts: 50
       })
     };
     mockTaskQueueService = jasmine.createSpyObj(
