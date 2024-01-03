@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, Observable, ReplaySubject, interval, merge, of, throwError } from 'rxjs';
-import { catchError, distinctUntilChanged, filter, ignoreElements, map, share, switchMap, takeLast, takeUntil, takeWhile, tap } from 'rxjs/operators';
-import { Task, TaskPlan } from 'src/domain/tasks';
+import { BehaviorSubject, Observable, ReplaySubject, interval, merge } from 'rxjs';
+import { distinctUntilChanged, filter, ignoreElements, map, share, switchMap, takeLast, takeUntil, takeWhile, tap } from 'rxjs/operators';
+import { Task, TaskDraft } from 'src/domain/tasks';
 import { ClockService } from './clock.service';
-import { TaskBuilderService } from './task-builder.service';
-import { TaskOrchestratorService } from './task-orchestrator.service';
+import { FinanceService } from './finance.service';
 
 const TASK_UPDATE_INTERVAL = 20;
+const TASK_DURATION_PER_VEHICLE_REQUIRED = 5000;
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +30,7 @@ export class TaskQueueService {
 
   constructor(
     private readonly clockService: ClockService,
-    private readonly taskBuilderService: TaskBuilderService,
-    private readonly taskOrchestratorService: TaskOrchestratorService
+    private readonly financeService: FinanceService
   ) {
     this.lifecycle$ = merge(
       this.propagateActiveTaskInQueue(),
@@ -41,21 +40,25 @@ export class TaskQueueService {
     );
   }
 
-  enqueue(request: TaskPlan): Observable<void> {
+  enqueue(draft: TaskDraft): Observable<void> {
     return new Observable(observer => {
+      const duration = (draft.plan.resourceUsage.vehicles || 0) * TASK_DURATION_PER_VEHICLE_REQUIRED;
       const task: Task = {
-        ...this.taskBuilderService.buildTask(request),
+        ...draft,
+        state: 'queued',
         taskId: (this._finishedTasks.length + this._taskQueue.length + 1),
-        plan: request
+        duration,
+        cost: NaN, // TODO set this
+        description: `${draft.type} | ${draft.product?.simpleName || 'NONAME'} | ${Math.ceil(duration / 1000)}s`
       };
       this._taskQueue.push(task);
       this._taskQueueSource.next(this._taskQueue);
-
+      this.financeService.transact(-task.plan.marketability.expenses);
       observer.next();
       observer.complete();
-      return this.taskOrchestratorService.onTaskStarted(task).pipe(
-        ignoreElements()
-      ).subscribe();
+      return {
+        unsubscribe() { }
+      }
     });
   }
 
@@ -76,15 +79,14 @@ export class TaskQueueService {
         this._activeTaskSource.next(task);
       }),
       filter((task): task is Task => (task !== null)),
-      switchMap(task => this.taskOrchestratorService.onTaskStarted(task)),
       ignoreElements()
     );
   }
 
   /**
-   * Will watch for clock signals (resumed, paused, etc) and correspondingly control
-   * the passage of time, reflected in the progress of the active task.
-   * @returns An observable that will only execute this logic, without ever emitting a value.
+   * Will watch for clock signals (resumed, paused, etc) and the passage of time, and reflect
+   * that into the progress of the active task.
+   * @returns An observable that will only execute this loop logic construct, without ever emitting anything.
    */
   private propagateClockSignals(): Observable<never> {
     const whenClockIsRunning = this.clockService.state$.pipe(
@@ -107,18 +109,11 @@ export class TaskQueueService {
    * Will consecutively advance progress towards completion of the active task.
    * When the progress is completed (the inner observable must send a `complete` signal), it will
    * also update, see `whenTaskEnds`.
-   * @returns An observable that will only emit the amount of time passed for the task to be completed.
+   * @returns An observable that will emit a void event only once, when the active task is completed.
    */
   private advanceCurrentTask(task: Task): Observable<void> {
     const initialTimeSpent = this._currentTaskProgress;
     return interval(TASK_UPDATE_INTERVAL).pipe(
-      switchMap(i => this.taskOrchestratorService.onBeforeTaskAdvance(task).pipe(
-        map(() => i),
-        catchError(() => {
-          this.clockService.togglePause();
-          return EMPTY;
-        })
-      )),
       map(i => (((i + 1) * TASK_UPDATE_INTERVAL) + initialTimeSpent)),
       takeWhile(timeSpent => (task.duration - timeSpent > 0)),
       tap(timeSpent => {
@@ -127,7 +122,8 @@ export class TaskQueueService {
         this._currentTaskProgressPercentSource.next(percent);
       }),
       takeLast(1),
-      switchMap(() => this.whenTaskEnds(task))
+      map(() => void 0),
+      tap(() => this.whenTaskEnds(task))
     );
   }
 
@@ -136,7 +132,11 @@ export class TaskQueueService {
    * - Pops (removes first element) from queue array, which was the 'active' task just now.
    * - Resets/cleans up state after this. This includes propagation of the newly updated queue.
    */
-  private whenTaskEnds(finishedTask: Task): Observable<void> {
+  private whenTaskEnds(finishedTask: Task): void {
+    if (finishedTask.plan.marketability.profits) {
+      this.financeService.transact(finishedTask.plan.marketability.profits);
+    }
+
     finishedTask.state = 'finished';
     this._finishedTasks.push(finishedTask);
     this._latestFinishedTaskSource.next(finishedTask);
@@ -148,6 +148,5 @@ export class TaskQueueService {
     this._currentTaskProgressPercentSource.next(0);
     this._finishedTasksSource.next(this._finishedTasks);
     this._taskQueueSource.next(this._taskQueue);
-    return this.taskOrchestratorService.onTaskFinalized(finishedTask);
   }
 }

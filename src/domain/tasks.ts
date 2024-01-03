@@ -7,22 +7,21 @@ export type TaskTypes = 'buy' | 'sell';
 
 export interface TaskDraft {
     type: TaskTypes;
-    state: TaskStates;
     timeCreated: number;
     plan: TaskPlan;
+    product?: PeanutProduct;
 }
 
 export interface Task extends TaskDraft {
+    state: TaskStates;
     taskId: number;
     duration: number;
     cost: number;
     description: string;
-    product?: PeanutProduct;
     timeFinished?: number;
 }
 
 export interface TaskPlan {
-    type: TaskTypes;
     marketability: ProductMarketabilityReport;
     resourceUsage: ResourceUsageReport;
 }
