@@ -53,7 +53,7 @@ export class TaskQueueService {
 
       observer.next();
       observer.complete();
-      return this.taskOrchestratorService.onTaskStarted(task.plan).pipe(
+      return this.taskOrchestratorService.onTaskStarted(task).pipe(
         ignoreElements()
       ).subscribe();
     });
@@ -76,7 +76,7 @@ export class TaskQueueService {
         this._activeTaskSource.next(task);
       }),
       filter((task): task is Task => (task !== null)),
-      switchMap(task => this.taskOrchestratorService.onTaskStarted(task.plan)),
+      switchMap(task => this.taskOrchestratorService.onTaskStarted(task)),
       ignoreElements()
     );
   }
@@ -112,7 +112,7 @@ export class TaskQueueService {
   private advanceCurrentTask(task: Task): Observable<void> {
     const initialTimeSpent = this._currentTaskProgress;
     return interval(TASK_UPDATE_INTERVAL).pipe(
-      switchMap(i => this.taskOrchestratorService.onBeforeTaskAdvance(task.plan).pipe(
+      switchMap(i => this.taskOrchestratorService.onBeforeTaskAdvance(task).pipe(
         map(() => i),
         catchError(() => {
           this.clockService.togglePause();
@@ -148,6 +148,6 @@ export class TaskQueueService {
     this._currentTaskProgressPercentSource.next(0);
     this._finishedTasksSource.next(this._finishedTasks);
     this._taskQueueSource.next(this._taskQueue);
-    return this.taskOrchestratorService.onTaskFinalized(finishedTask.plan);
+    return this.taskOrchestratorService.onTaskFinalized(finishedTask);
   }
 }
