@@ -13,7 +13,7 @@ export class ActionsService {
   constructor(
     private readonly resourcesService: ResourceStockService,
     private readonly financeService: FinanceService,
-    private readonly tasksService: TaskQueueService
+    private readonly taskQueueService: TaskQueueService
   ) { }
 
   sellPeanut(): Observable<void> {
@@ -29,7 +29,7 @@ export class ActionsService {
       this.resourcesService.calculateSellOperationResourceUsage(product),
       this.financeService.calculateProductMarketability(product)
     ]).pipe(
-      switchMap(([resourceUsage, marketability]) => this.tasksService.enqueue({
+      switchMap(([resourceUsage, marketability]) => this.taskQueueService.enqueue({
         marketability,
         resourceUsage,
         type: 'sell'
