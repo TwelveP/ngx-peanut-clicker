@@ -24,7 +24,8 @@ export class ResourceStockService {
       throw new Error('Not enough peanuts in stock');
     }
     return of({
-      duration: product.peanutsAmount * 100
+      peanuts: product.peanutsAmount,
+      vehicles: Math.ceil(product.peanutsAmount / 1000)
     }).pipe(
       tap(() => {
         this._peanutStock -= product.peanutsAmount;
