@@ -2,8 +2,8 @@ import { PricedElement } from "./base";
 
 export class BagOfPeanuts implements PeanutProduct {
     readonly simpleName = 'Bag of peanuts';
-    readonly peanutsAmount = 15;
-    readonly initialProductionCost = 50;
+    readonly peanutsAmount = 150;
+    readonly initialProductionCost = 90;
 }
 
 export class SinglePeanut implements PeanutProduct {
