@@ -3,6 +3,7 @@ import { BehaviorSubject, Observable, of, take, tap } from 'rxjs';
 import { PeanutProduct } from 'src/domain/peanuts';
 import { ResourceUsageReport } from 'src/domain/resources';
 import { SettingsService } from '../settings.service';
+import { Task } from 'src/domain/tasks';
 
 @Injectable({
   providedIn: 'root'
@@ -26,12 +27,14 @@ export class ResourceStockService {
     return of({
       peanuts: product.peanutsAmount,
       vehicles: Math.ceil(product.peanutsAmount / 1000)
-    }).pipe(
-      tap(() => {
-        this._peanutStock -= product.peanutsAmount;
-        this._peanutStockSource.next(this._peanutStock);
-      })
-    );
+    });
+  }
+
+  consumeResourcesFor(task: Task): void {
+    if (task.plan.resourceUsage.peanuts) {
+      this._peanutStock -= task.plan.resourceUsage.peanuts;
+      this._peanutStockSource.next(this._peanutStock);
+    }
   }
 
   private waitForInitialResources() {

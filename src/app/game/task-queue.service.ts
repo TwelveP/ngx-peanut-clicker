@@ -4,6 +4,7 @@ import { distinctUntilChanged, filter, ignoreElements, map, share, switchMap, ta
 import { Task, TaskDraft } from 'src/domain/tasks';
 import { ClockService } from './clock.service';
 import { FinanceService } from './finance.service';
+import { ResourceStockService } from './resource-stock.service';
 
 const TASK_UPDATE_INTERVAL = 20;
 const TASK_DURATION_PER_VEHICLE_REQUIRED = 5000;
@@ -30,7 +31,8 @@ export class TaskQueueService {
 
   constructor(
     private readonly clockService: ClockService,
-    private readonly financeService: FinanceService
+    private readonly financeService: FinanceService,
+    private readonly resourcesService: ResourceStockService
   ) {
     this.lifecycle$ = merge(
       this.propagateActiveTaskInQueue(),
@@ -53,6 +55,7 @@ export class TaskQueueService {
       };
       this._taskQueue.push(task);
       this._taskQueueSource.next(this._taskQueue);
+      this.resourcesService.consumeResourcesFor(task);
       this.financeService.transact(-task.plan.marketability.expenses);
       observer.next();
       observer.complete();
