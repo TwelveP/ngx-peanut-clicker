@@ -7,6 +7,7 @@ import { FinanceService } from './finance.service';
 import { ResourceStockService } from './resource-stock.service';
 
 const TASK_UPDATE_INTERVAL = 20;
+const TASK_DURATION_PER_PEANUT_REQUIRED = 40;
 const TASK_DURATION_PER_VEHICLE_REQUIRED = 5000;
 
 @Injectable({
@@ -44,7 +45,9 @@ export class TaskQueueService {
 
   enqueue(draft: TaskDraft): Observable<void> {
     return new Observable(observer => {
-      const duration = (draft.plan.resourceUsage.vehicles || 0) * TASK_DURATION_PER_VEHICLE_REQUIRED;
+      const transportationSubtaskDuration = (draft.plan.resourceUsage.vehicles || 0) * TASK_DURATION_PER_VEHICLE_REQUIRED;
+      const executionSubtaskDuration = (draft.plan.resourceUsage.peanuts || 0) * TASK_DURATION_PER_PEANUT_REQUIRED;
+      const duration = (transportationSubtaskDuration + executionSubtaskDuration);
       const task: Task = {
         ...draft,
         state: 'queued',
